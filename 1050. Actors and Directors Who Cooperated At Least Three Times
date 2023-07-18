@@ -1,0 +1,12 @@
+select distinct temp.actor_id, temp.director_id from (
+
+select actor_id, director_id, concat(actor_id, '+', director_id) as fre from ActorDirector
+) as temp
+group by temp.fre
+having count(temp.fre)>=3
+
+///////////////////////////////////
+
+select actor_id , director_id from ActorDirector
+group by actor_id, director_id
+having count(timestamp)>=3;
