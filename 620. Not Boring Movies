@@ -1,0 +1,3 @@
+select * from Cinema a
+where mod(a.id, 2) != 0 and description!= "boring"
+order by a.rating desc;
