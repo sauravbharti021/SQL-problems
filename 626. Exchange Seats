@@ -1,0 +1,31 @@
+    select a.id, 
+    case when b.id is null then a.student
+    else b.student
+    end as student
+    
+    from Seat a
+    left join
+    Seat b
+    on ((a.id+1)^1)-1=b.id 
+    order by a.id
+
+///////////////////
+
+
+
+
+select * from (
+
+    select a.id-1 as id, a.student from Seat a where 
+    a.id%2=0 
+    union
+
+    select b.id+1 as id, b.student from Seat b where
+    b.id%2=1 and b.id != (select max(id) from Seat)
+
+    union
+    select c.id as id , c.student from Seat c
+    where c.id%2=1 and c.id=(select max(id) from Seat)
+
+) as temp 
+order by id;
