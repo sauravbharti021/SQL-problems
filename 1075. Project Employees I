@@ -1,0 +1,16 @@
+select temp.project_id, round( sum(temp.experience_years)
+             /
+             count(temp.employee_id), 2) as average_years
+             from
+             (
+
+                select a.experience_years, a.employee_id, b.project_id from Employee a
+                inner join 
+                Project b
+                on a.employee_id = b.employee_id
+             
+             
+             )
+             as temp
+             group by
+             temp.project_id;
