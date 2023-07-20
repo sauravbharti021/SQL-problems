@@ -1,0 +1,18 @@
+
+select c.user_id as buyer_id, c.join_date as join_date, ifnull(temp.freq, 0) as orders_in_2019 from Users c
+
+left join
+
+(
+    select lol.buyer_id as id, count(lol.order_id) as freq from (
+        select b.buyer_id as buyer_id, b.order_id as order_id from Orders b 
+        where
+        b.order_date >= "2019-01-01" and b.order_date <= "2019-12-31"
+
+    ) as lol
+    group by lol.buyer_id
+
+) as temp
+
+
+ on c.user_id=temp.id
