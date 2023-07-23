@@ -1,0 +1,13 @@
+select round(
+
+    ((select count(b.customer_id) from Delivery b
+    where (b.customer_id, b.order_date)  in (
+        select a.customer_id, min(a.order_date) from Delivery a
+        group by a.customer_id
+
+    ) and b.order_date = b.customer_pref_delivery_date) *100)
+    /
+    (select count(distinct c.customer_id) from Delivery c)
+
+, 2) as immediate_percentage;
+
