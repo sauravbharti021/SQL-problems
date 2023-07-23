@@ -1,0 +1,15 @@
+select temp.month as month, temp.country as country, count(temp.id) as trans_count,  sum(temp.state= "approved") as approved_count, sum(temp.amount) as trans_total_amount,
+
+   ifnull( (select sum(c.amount) from Transactions c
+     where c.state= "approved" and temp.country=c.country and month(c.trans_date) = temp.lol_month and year(c.trans_date) = temp.lol_year
+     ),
+        0)
+           as approved_total_amount
+
+from
+(
+    select *, concat(year(a.trans_date), "-", lpad(month(a.trans_date),2 ,'0')) as month, month(a.trans_date) as lol_month, year(a.trans_date) as lol_year from Transactions a
+) as temp
+group by temp.country, temp.month;
+;
+
