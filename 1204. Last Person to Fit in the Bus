@@ -1,0 +1,11 @@
+select temp.name as person_name from (
+
+    select a.person_name as "name", a.turn as "turn"  from Queue a
+    where (
+        select sum(b.weight) from Queue b
+        where b.turn<=a.turn
+    )<=1000
+) as temp
+order by temp.turn desc
+limit 1
+;
