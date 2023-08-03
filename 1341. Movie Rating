@@ -1,0 +1,30 @@
+ 
+    select temp.name as results from(
+
+            select count(a.user_id) as "count", b.name as "name" from MovieRating a
+            inner join 
+            Users b
+            on a.user_id= b.user_id
+            group by a.user_id
+        ) as temp
+    order by temp.count desc, temp.name asc
+    limit 1
+)
+union all
+(
+    select now.name as results from (
+            select temp.average, b.title as "name" from Movies b
+            inner join
+            (
+                select avg(a.rating) as "average", a.movie_id as "movie_id" from MovieRating a
+                where month(a.created_at)=2 and year(a.created_at)= 2020
+                group by a.movie_id
+
+            ) as temp
+            on b.movie_id = temp.movie_id
+            order by temp.average desc, b.title asc
+            limit 1
+    ) as now
+ 
+)
+
