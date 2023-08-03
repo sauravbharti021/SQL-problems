@@ -1,0 +1,13 @@
+select c.product_name, now.unit from Products c
+right join 
+
+    (select temp.product_id, sum(temp.unit) as "unit" from (
+
+        select * from Orders a
+        where month(a.order_date)= 2 and year(a.order_date)= 2020
+    ) as temp
+    group by temp.product_id
+    having sum(temp.unit)>=100
+    )
+as now
+on now.product_id = c.product_id;
