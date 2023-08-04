@@ -1,0 +1,10 @@
+select a.stock_name , sum(
+    case
+        when a.operation="Sell" then a.price
+        else -a.price
+    end
+
+) as capital_gain_loss
+
+from Stocks a
+group by a.stock_name
