@@ -1,0 +1,6 @@
+
+select b.unique_id, a.name from EmployeeUNI b
+right join
+Employees a
+on b.id= a.id
+group by a.id;
