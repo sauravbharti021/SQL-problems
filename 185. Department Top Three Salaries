@@ -1,0 +1,42 @@
+(
+select d.name as "Department", now.name as "Employee", now.salary as "salary" from
+
+(
+    select  * from employee c
+    where c.departmentId in 
+    (select * from (
+        select b.departmentId from Employee b
+        group by b.departmentId 
+        having count(distinct b.salary)>=3
+
+    ) as temp) and c.salary >= (
+        select * from (
+
+        select distinct a.salary from Employee a 
+        where a.departmentId= c.departmentId 
+        order by a.salary desc
+        ) as lol
+        limit 2, 1
+    )
+) as now
+inner join 
+Department as d
+on now.departmentId= d.id
+)
+union all
+(
+    select d.name as "Department", temp.name as "Employee", temp.salary as "Salary" from
+    (
+
+        select * from Employee a
+        where a.departmentId in (
+            select b.departmentId from Employee b
+            group by b.departmentId
+            having count(distinct b.salary)<3
+        )
+    ) as temp
+    inner join
+    Department as d
+    on temp.departmentId= d.id
+)
+
