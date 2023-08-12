@@ -1,0 +1,46 @@
+
+select a.request_at as Day, round((
+
+    select sum(b.request_at=a.request_at and (b.status = 'cancelled_by_driver' or b.status=
+              'cancelled_by_client') and c.banned!= 'Yes' and temp.no_access!='Yes') from Trips b 
+                inner join 
+                Users c
+                on c.users_id =b.client_id
+                inner join
+                (
+                select e.users_id , e.banned as "no_access" from Users e
+                ) as temp
+                on temp.users_id = b.driver_id
+    
+
+)/
+
+(
+    select sum(b.request_at= a.request_at  and c.banned!= 'Yes' and temp.no_access!='Yes') from Trips b 
+                inner join 
+                Users c
+                on c.users_id =b.client_id
+                inner join
+                (
+                select e.users_id , e.banned as "no_access" from Users e
+                ) as temp
+                on temp.users_id = b.driver_id
+
+)
+,2
+
+) as "Cancellation Rate" from Trips a
+group by a.request_at
+having a.request_at>= "2013-10-01" and a.request_at <="2013-10-03" and (
+    
+    select sum(b.request_at= a.request_at  and c.banned!= 'Yes' and temp.no_access!='Yes') from Trips b 
+                inner join 
+                Users c
+                on c.users_id =b.client_id
+                inner join
+                (
+                select e.users_id , e.banned as "no_access" from Users e
+                ) as temp
+                on temp.users_id = b.driver_id
+)>0
+order by a.request_at
