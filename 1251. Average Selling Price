@@ -1,0 +1,14 @@
+select temp.product_id, round(
+    sum(temp.price)
+    /
+    sum(temp.units),
+    2
+) as average_price from 
+    (select a.product_id, a.units, 
+    ((
+        select b.price from Prices b
+        where b.product_id = a.product_id and b.start_date<=a.purchase_date and b.end_date>= a.purchase_date
+    )* a.units) as price
+    from UnitsSold a)
+as temp
+group by temp.product_id
