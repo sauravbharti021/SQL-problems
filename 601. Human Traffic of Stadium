@@ -1,0 +1,14 @@
+select * from Stadium a
+where 
+(
+    a.id+1 in (select b.id from Stadium b where b.people>=100) and a.id+2 in (select b.id from Stadium b where b.people>=100) and a.people>=100
+)
+or 
+(
+     a.id-1 in (select b.id from Stadium b where b.people>=100) and a.id+1 in (select b.id from Stadium b where b.people>=100) and a.people>=100
+)
+or
+(
+    a.id-1 in (select b.id from Stadium b where b.people>=100) and a.id-2 in (select b.id from Stadium b where b.people>=100) and a.people>=100
+)
+order by a.visit_date
